@@ -1,0 +1,5 @@
+__pycache__
+db.sqlite3
+package-lock.json
+Pipfile.lock
+Pipfile
