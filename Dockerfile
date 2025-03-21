@@ -51,8 +51,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/lib/nginx /run/nginx
 
 # ssl
-COPY ssl/certificate.crt /etc/ssl/certs/certificate.crt
-COPY ssl/certificate.key /etc/ssl/private/certificate.key
+#COPY ssl/certificate.crt /etc/ssl/certs/certificate.crt
+#COPY ssl/certificate.key /etc/ssl/private/certificate.key
 
 
 # Expose ports using environment variables with defaults
