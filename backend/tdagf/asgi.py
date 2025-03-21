@@ -14,7 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from api.consumers import ChatConsumer
 
 websocket_urlpatterns = [
-    path("ws/chat", GameConsumer.as_asgi()),
+    path("ws/chat", ChatConsumer.as_asgi()),
 ]
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tdasebsite.settings")
