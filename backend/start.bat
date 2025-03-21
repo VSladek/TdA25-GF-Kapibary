@@ -13,6 +13,7 @@ if "%1"=="" (
 
 if "%1"=="dev" (
     echo Starting backend in development mode
+    .\.venv\Scripts\activate
     python manage.py runserver 127.0.0.1:%BACKEND_PORT%
     exit /b 0
 ) else if "%1"=="prod" (
