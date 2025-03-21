@@ -16,7 +16,7 @@ export default function Home() {
     setMessages((prev) => [...prev, data]);
   };
   const { sendMessage, createConnection } = useWebSocket({
-    url: "/api/ws/chat",
+    url: "/ws/chat",
     handleMessageAction,
     isError: false,
   });
