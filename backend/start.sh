@@ -8,7 +8,7 @@ if [ "$1" = "dev" ]; then
 elif [ "$1" = "prod" ]; then
   echo "Starting backend in production mode"
 
-  gunicorn backend.wsgi:application --bind 0.0.0.0:$BACKEND_PORT --workers 2
+  uvicorn backend.asgi:application --host 0.0.0.0 --port $BACKEND_PORT --workers $BACKEND_WORKERS
 elif [ "$1" = "setup-prod" ]; then
   echo "Setting up backend for production"
 

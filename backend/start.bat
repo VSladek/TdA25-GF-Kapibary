@@ -18,7 +18,7 @@ if "%1"=="dev" (
     exit /b 0
 ) else if "%1"=="prod" (
     echo Starting backend in production mode
-    gunicorn backend.wsgi:application --bind 0.0.0.0:%BACKEND_PORT% --workers %BACKEND_WORKERS%
+    uvicorn backend.asgi:application --host 0.0.0.0 --port %BACKEND_PORT% --workers %BACKEND_WORKERS%
     exit /b 0
 ) else if "%1"=="setup-prod" (
     echo Setting up backend for production

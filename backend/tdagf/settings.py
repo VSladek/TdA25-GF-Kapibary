@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "api",
+    "channels",
     "rest_framework",
     "rest_framework.authtoken",
 ]
@@ -71,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tdagf.wsgi.application'
+ASGI_APPLICATION = "tdagf.asgi.application"
+
 
 
 # Database
@@ -125,7 +128,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-UTH_USER_MODEL = "auth.User"
+AUTH_USER_MODEL = "auth.User"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
