@@ -1,21 +1,14 @@
 #!/bin/sh
 
-if [ $BACKEND_PORT = "" ]; then
-  BACKEND_PORT=2568
-fi
-if [ $BACKEND_WORKERS = "" ]; then
-  BACKEND_WORKERS=2
-fi
-
 if [ "$1" = "dev" ]; then
   echo "Starting backend in development mode"
+  source .venv/bin/activate
 
   python3 manage.py runserver 127.0.0.1:$BACKEND_PORT
-
 elif [ "$1" = "prod" ]; then
   echo "Starting backend in production mode"
 
-  gunicorn backend.wsgi:application --bind 0.0.0.0:$BACKEND_PORT --workers $BACKEND_WORKERS
+  gunicorn backend.wsgi:application --bind 0.0.0.0:$BACKEND_PORT --workers 2
 elif [ "$1" = "setup-prod" ]; then
   echo "Setting up backend for production"
 

@@ -1,10 +1,5 @@
 #!/bin/sh
 
-# Default frontend port
-if [ -z "$FRONTEND_PORT" ]; then
-  FRONTEND_PORT=80
-fi
-
 if [ "$1" = "dev" ]; then
   echo "Starting frontend in development mode on port $FRONTEND_PORT"
 
@@ -16,12 +11,12 @@ elif [ "$1" = "prod" ]; then
 elif [ "$1" = "setup-prod" ]; then
   echo "Setting up frontend for production"
 
-  npm install
+  npm install -f
   npm run build
 elif [ "$1" = "setup-dev" ]; then
   echo "Setting up frontend for development"
 
-  npm install
+  npm install -f
 else
   echo "Unknown frontend environment: $1"
   exit 1

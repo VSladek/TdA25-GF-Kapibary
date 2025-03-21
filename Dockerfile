@@ -37,7 +37,7 @@ FROM python:3.12-alpine AS final
 WORKDIR /app
 
 # Install Node.js and bash for compatibility with the scripts
-RUN apk add --no-cache nodejs npm bash
+RUN apk add --no-cache nodejs npm bash nginx openssl
 
 # Copy backend from the backend stage
 COPY --from=backend /app/backend /app/backend
@@ -46,17 +46,27 @@ COPY --from=backend /opt/venv /opt/venv
 # Copy frontend build artifacts
 COPY --from=frontend /app/frontend /app/frontend
 
+# Configure NGINX
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /var/lib/nginx /run/nginx
+
+# ssl
+COPY ssl/certificate.crt /etc/ssl/certs/certificate.crt
+COPY ssl/certificate.key /etc/ssl/private/certificate.key
+
+
 # Expose ports using environment variables with defaults
 ENV BACKEND_PORT=2568
-ENV FRONTEND_PORT=80
+ENV FRONTEND_PORT=3000
+ENV HTTP_PORT=80
+ENV HTTPS_PORT=443
 
 # Copy the main start script to the root
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
 # Expose the ports
-EXPOSE ${BACKEND_PORT}
-EXPOSE ${FRONTEND_PORT}
+EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
 
 # Default command to run the app in production mode
 CMD ["/app/start.sh", "prod"]
