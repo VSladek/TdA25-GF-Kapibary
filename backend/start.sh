@@ -13,8 +13,7 @@ elif [ "$1" = "setup-prod" ]; then
   echo "Setting up backend for production"
 
   python3 -m venv /opt/venv
-  source .venv/bin/activate
-  #source /opt/venv/bin/activate
+  source /opt/venv/bin/activate
   python3 -m pip install --upgrade pip
   pip install -r requirements.txt
 
