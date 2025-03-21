@@ -13,11 +13,11 @@ if "%1"=="dev" (
     npm start -- --port %FRONTEND_PORT%
 ) else if "%1"=="setup-prod" (
     echo Setting up frontend for production
-    npm install
+    npm install -f
     npm run build
 ) else if "%1"=="setup-dev" (
     echo Setting up frontend for development
-    npm install
+    npm install -f
 ) else (
     echo Unknown frontend environment: %1
     exit /b 1
