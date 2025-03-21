@@ -37,7 +37,7 @@ FROM python:3.12-alpine AS final
 WORKDIR /app
 
 # Install Node.js and bash for compatibility with the scripts
-RUN apk add --no-cache nodejs npm bash nginx openssl
+RUN apk add --no-cache nodejs npm bash nginx openssl envsubst
 
 # Copy backend from the backend stage
 COPY --from=backend /app/backend /app/backend
@@ -47,8 +47,7 @@ COPY --from=backend /opt/venv /opt/venv
 COPY --from=frontend /app/frontend /app/frontend
 
 # Configure NGINX
-COPY nginx.conf /etc/nginx/nginx.conf
-RUN mkdir -p /var/lib/nginx /run/nginx
+COPY nginx.conf /app/nginx.conf
 
 # ssl
 #COPY ssl/certificate.crt /etc/ssl/certs/certificate.crt

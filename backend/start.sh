@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ $BACKEND_WORKERS = "" ]; then
+  BACKEND_WORKERS=2
+fi
+
 if [ "$1" = "dev" ]; then
   echo "Starting backend in development mode"
   source .venv/bin/activate
@@ -7,8 +11,10 @@ if [ "$1" = "dev" ]; then
   python3 manage.py runserver 127.0.0.1:$BACKEND_PORT
 elif [ "$1" = "prod" ]; then
   echo "Starting backend in production mode"
+  source /opt/venv/bin/activate
 
-  uvicorn backend.asgi:application --host 0.0.0.0 --port $BACKEND_PORT --workers $BACKEND_WORKERS
+  python3 manage.py runserver 127.0.0.1:$BACKEND_PORT
+  # uvicorn backend.asgi:application --host 0.0.0.0 --port $BACKEND_PORT --workers 2
 elif [ "$1" = "setup-prod" ]; then
   echo "Setting up backend for production"
 
