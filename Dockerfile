@@ -12,7 +12,7 @@ COPY backend/start.sh /app/backend/start.sh
 RUN chmod +x /app/backend/start.sh
 
 # Copy requirements and use start.sh for production setup
-COPY requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/requirements.txt
 RUN /app/backend/start.sh setup-prod
 
 # --- Frontend Stage ---
