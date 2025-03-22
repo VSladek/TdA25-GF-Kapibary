@@ -11,10 +11,11 @@ import os
 from django.urls import path
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
-from api.consumers import ChatConsumer
+from api.consumers import ChatConsumer, RoomConsumer
 
 websocket_urlpatterns = [
-    path("ws/chat", ChatConsumer.as_asgi()),
+    path("ws/chat/<uuid>", ChatConsumer.as_asgi()),
+    path("ws/room/<uuid>", RoomConsumer.as_asgi()),
 ]
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tdasebsite.settings")
