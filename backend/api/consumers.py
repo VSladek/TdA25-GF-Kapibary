@@ -70,8 +70,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         }
                     )
                 else:
+                    await self.delete_room(uuid)
                     result = await self.get_result(data_room["vote"])
-                    result ["type"] = "result"
+                    result["type"] = "result"
                     await self.channel_layer.group_send(
                         f"room_{uuid}",
                         {
@@ -154,6 +155,10 @@ class RoomConsumer(AsyncWebsocketConsumer):
         token = await self.get_user_from_token()
         hello = await self.get_token(token)
         return True if hello == "spravce" else False
+
+    @sync_to_async
+    def delete_room(self, uuid):
+        Room.objects.filter(uuid=uuid).delete()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     data = {}
