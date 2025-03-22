@@ -25,17 +25,27 @@ export default function Home() {
   }, []);
 
   const onSendAction = (message: string) => {
-    sendMessage({ username, message });
+    sendMessage({
+      timestamp: new Date().toUTCString(),
+      username,
+      message,
+    } as Message);
   };
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col [--chatSize:55px]">
       <UsernameDialog
         open={!username}
         setUserNameAction={(username: string) => setUsername(username)}
       />
-      <ChatWindow messages={messages} />
-      <ChatInput onSendAction={onSendAction} />
+      <ChatWindow
+        messages={messages}
+        className="h-[calc(100dvh-var(--chatSize))] p-2"
+      />
+      <ChatInput
+        onSendAction={onSendAction}
+        className="flex space-x-2 p-3 h-[var(--chatSize)]"
+      />
     </main>
   );
 }

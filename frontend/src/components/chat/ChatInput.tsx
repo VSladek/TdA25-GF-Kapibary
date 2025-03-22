@@ -4,24 +4,36 @@ import { Button } from "../ui/button";
 
 export default function ChatInput({
   onSendAction,
+  className,
 }: {
   onSendAction: (message: string) => void;
+  className?: string;
 }) {
   const [message, setMessage] = useState("");
   const onSend = () => {
+    if (!message) return;
     onSendAction(message);
     setMessage("");
+    window.document.getElementById("chat")?.scrollTo({
+      top: window.document.getElementById("chat")?.scrollHeight,
+      behavior: "smooth",
+    });
   };
   return (
-    <div className="flex space-x-2 p-2">
+    <div className={className}>
       <Input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type a message"
-        height="h-32"
         onKeyDown={(e) => e.key === "Enter" && onSend()}
+        className="h-[38px]"
       />
-      <Button onClick={onSend}>Send</Button>
+      <Button
+        onClick={onSend}
+        className="h-[38px] text-white bg-blue-500 hover:bg-blue-700"
+      >
+        Send
+      </Button>
     </div>
   );
 }
