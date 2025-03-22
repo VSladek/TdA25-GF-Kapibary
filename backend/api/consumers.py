@@ -164,6 +164,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     data = {}
     async def connect(self):
         uuid = self.scope["url_route"]["kwargs"]["uuid"]
+        if(await self.check_room(uuid)):
+            await self.send(text_data=json.dumps({"type": "error", "message": "Místnost neexistuje"}))
+            return
+        
+        data_message = {"chatHistory": await self.get_chat_history(uuid), "type": "connection"}
+        await self.send(text_data=json.dumps(data_message))
         await self.channel_layer.group_add(f"chat_{uuid}", self.channel_name)
         await self.accept()
 
@@ -173,6 +179,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         uuid = self.scope["url_route"]["kwargs"]["uuid"]
+        data_receive = json.loads(text_data)
+        match data_receive["type"]:
+            case "add":
+                await self.add_message(data_receive, uuid)
+                await self.channel_layer.group_send(
+                    f"chat_{uuid}",
+                    {
+                        "type": "chat_message",
+                        "message": json.dumps(data_receive),
+                    }
+                )
+            case "delete":
+                await self.delete_message(data_receive["id"])
+                await self.channel_layer.group_send(
+                    f"chat_{uuid}",
+                    {
+                        "type": "chat_message",
+                        "message": json.dumps(data_receive),
+                    }
+                )
+            case "edit":
+                await self.edit_message(data_receive)
+                await self.channel_layer.group_send(
+                    f"chat_{uuid}",
+                    {
+                        "type": "chat_message",
+                        "message": json.dumps(data_receive),
+                    }
+                )
         await self.channel_layer.group_send(
             f"chat_{uuid}",
             {
@@ -185,3 +220,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         await self.send(text_data=message)
 
+    @sync_to_async
+    def check_room(self, uuid):
+        try:
+            Room.objects.get(uuid=uuid)
+            return True
+        except Room.DoesNotExist:
+            return False
+
+    @sync_to_async
+    def get_chat_history(self, uuid):
+        messages = Message.objects.filter(room=uuid).order_by("created_at")
+        serializer = MessageSerializerView(messages, many=True)
+        return serializer.data
+
+    @sync_to_async
+    def add_message(self, message, uuid_room):
+        Message.objects.create(room=uuid_room, username=message["username"], content=message["content"])
+
+    @sync_to_async
+    def delete_message(self, id_message):
+        Message.objects.filter(id=id_message).delete()
+
+    @sync_to_async
+    def edit_message(self, message):
+        Message.objects.filter(id=message["id"]).update(content=message["content"])

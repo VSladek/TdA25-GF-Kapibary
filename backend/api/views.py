@@ -43,6 +43,8 @@ class OneRoomView(APIView):
         data = request.data
         if(data.get("code") == None):
             return Response({"message": "Code is required"}, status=400)
+        if(type(data.get("code")) != int):
+            return Response({"message": "Code must be an integer"}, status=400)
         try:
             room = Room.objects.get(code=data.get("code"))
         except Room.DoesNotExist:
