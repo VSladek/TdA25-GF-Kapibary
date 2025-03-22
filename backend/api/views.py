@@ -39,7 +39,7 @@ class AllRoomView(APIView):
 
 class OneRoomView(APIView):
     @permission_classes([AllowAny])
-    def get(self, request):
+    def post(self, request):
         data = request.data
         if(data.get("code") == None):
             return Response({"message": "Code is required"}, status=400)
